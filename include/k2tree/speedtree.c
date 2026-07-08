@@ -19,18 +19,21 @@ double stop_clock() {
 
 int main(int argc, char* argv[]){
 
-	if(argc<3){
-		fprintf(stderr,"USAGE: %s <GRAPH> <queries>\n",argv[0]);
+	if(argc<2){
+		fprintf(stderr,"USAGE: %s <GRAPH>\n",argv[0]);
 		return(-1);
 	}
 
-	MREP * rep = loadRepresentation(argv[1]);
+	//char *filename = (char *)malloc(sizeof(char)*20);
 	
-	char * list_file = argv[2];
+
+		TREP * trep = loadTreeRepresentation(argv[1]);
+	
+		char * list_file = argv[2];
 		
 		
 		
-	FILE * list_fp = fopen(list_file,"r");
+		FILE * list_fp = fopen(list_file,"r");
 	uint queries;
 	fread(&queries, sizeof(uint), 1, list_fp);
 	ulong recovered = 0;
@@ -42,27 +45,20 @@ int main(int argc, char* argv[]){
   start_clock();
   uint i;
   for(i=0;i<queries;i++) {
-    //In case we want to measure successors query
-    uint *l  = compact2AdjacencyList(rep, qry[i]);
+    uint *l  = compactTreeAdjacencyList(trep, qry[i]);
     recovered += l[0];
-    
-    //In case we want to measure range queries
-    /*
-    uint **l = compactRangeQuery(rep,qry[i],qry[i],0,rep->numberOfNodes-1);
-    recovered += l[0][0];
-    */
   }
   t += stop_clock(); 
   t *= 1000; // to milliseconds
 
 	fclose(list_fp);
-	fprintf(stderr,"Recovered Nodes: %lu\n",recovered);
+	fprintf(stderr,"Recovered Nodes: %lld\n",recovered);
 	fprintf(stderr,"Queries: %d\n",queries);
 	fprintf(stderr,"Total time(ms): %f",t);
 	fprintf(stderr,"Time per query: %f\n",t/queries);
 	fprintf(stderr,"Time per link: %f\n",t/recovered);
 
-  destroyRepresentation(rep);
+ // destroyTreeRepresentation(trep);
 
   
   return 0;

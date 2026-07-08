@@ -1,5 +1,10 @@
 #ifndef BitRankW32Int_h
 #define BitRankW32Int_h
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "basic.h"
 /* bitarray.h
    Copyright (C) 2005, Rodrigo Gonzalez, all rights reserved.
@@ -34,10 +39,6 @@
 //factor=3 => overhead 33%
 //factor=4 => overhead 25%
 //factor=20=> overhead 5%
-
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 typedef struct sbitRankW32Int{
     uint *data;

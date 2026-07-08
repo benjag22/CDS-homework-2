@@ -1,6 +1,10 @@
 #ifndef BASICSINCLUDED
 #define BASICSINCLUDED
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <sys/types.h>
 #include <sys/resource.h>
 #include <sys/times.h>
@@ -55,6 +59,18 @@
 #endif
 #define size_uchar 256
 
+#ifndef byte
+      #define byte unsigned char
+#endif
+
+/* reads bit p from e */
+#define bitgetchar(e,p) ((((e)[(p)/bitsM] >> ((p)%bitsM))) & 1)
+/* sets bit p in e */
+#define bitsetchar(e,p) ((e)[(p)/bitsM] |= (1<<((p)%bitsM)))
+/* cleans bit p in e */
+#define bitcleanchar(e,p) ((e)[(p)/bitsM] &= ~(1<<((p)%bitsM)))
+
+
 /* reads bit p from e */
 #define bitget(e,p) ((((e)[(p)/WORD] >> ((p)%WORD))) & 1)
 /* sets bit p in e */
@@ -65,13 +81,13 @@
 /* numero de enteros necesarios para representar e elementos de largo n */
 #define enteros(e,n) ((e)*(n))/WORD+(((e)*(n))%WORD > 0)
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 /* bits needed to represent a number between 0 and n */
 uint bits (uint n);
 
+uint bitread (uint *e, uint p, uint len);
+        // writes e[p..p+len-1] = s, assuming len <= W
+void bitwrite (uint *e, uint p, uint len, uint s);
+    // writes e[p..p+len-1] = 0, no assumption on len
 
 
 uint GetField(uint *A, register  uint len, register uint index);

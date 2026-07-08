@@ -41,6 +41,43 @@ uint bits (uint n) {
   return b;
 }
 
+uint bitread (uint *e, uint p, uint len)
+
+   { uint answ;
+     e += p/WORD; p %= WORD;
+     answ = *e >> p;
+     if (len == WORD)
+	  { if (p) answ |= (*(e+1)) << (WORD-p);
+	  }
+     else { if (p+len > WORD) answ |= (*(e+1)) << (WORD-p);
+            answ &= (1<<len)-1;
+	  }
+     return answ;
+   }
+
+
+  	// writes e[p..p+len-1] = s, len <= W
+
+void bitwrite (register uint *e, register uint p, 
+	       register uint len, register uint s)
+
+   { e += p/WORD; p %= WORD;
+     if (len == WORD)
+	  { *e |= (*e & ((1<<p)-1)) | (s << p);
+            if (!p) return;
+            e++;
+            *e = (*e & ~((1<<p)-1)) | (s >> (WORD-p));
+	  }
+     else { if (p+len <= WORD)
+	       { *e = (*e & ~(((1<<len)-1)<<p)) | (s << p);
+		 return;
+	       }
+	    *e = (*e & ((1<<p)-1)) | (s << p);
+            e++; len -= WORD-p;
+            *e = (*e & ~((1<<len)-1)) | (s >> (WORD-p));
+	  }
+   }
+  	// writes e[p..p+len-1] = 0
 
 
 
