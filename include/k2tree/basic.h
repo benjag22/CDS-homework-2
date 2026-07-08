@@ -34,11 +34,8 @@
 
 #define mask31 0x0000001F
 
-#define max(x,y) ((x)>(y)?(x):(y))
-#define min(x,y) ((x)<(y)?(x):(y))
-
 /*numero de bits del entero de la maquina*/
-#define W 32
+#define WORD 32
 /* W-1 */
 #define Wminusone 31
 /*numero de bits del entero de la maquina*/
@@ -59,14 +56,19 @@
 #define size_uchar 256
 
 /* reads bit p from e */
-#define bitget(e,p) ((((e)[(p)/W] >> ((p)%W))) & 1)
+#define bitget(e,p) ((((e)[(p)/WORD] >> ((p)%WORD))) & 1)
 /* sets bit p in e */
-#define bitset(e,p) ((e)[(p)/W] |= (1<<((p)%W)))
+#define bitset(e,p) ((e)[(p)/WORD] |= (1<<((p)%WORD)))
 /* cleans bit p in e */
-#define bitclean(e,p) ((e)[(p)/W] &= ~(1<<((p)%W)))
+#define bitclean(e,p) ((e)[(p)/WORD] &= ~(1<<((p)%WORD)))
 
 /* numero de enteros necesarios para representar e elementos de largo n */
-#define enteros(e,n) ((e)*(n))/W+(((e)*(n))%W > 0)
+#define enteros(e,n) ((e)*(n))/WORD+(((e)*(n))%WORD > 0)
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /* bits needed to represent a number between 0 and n */
 uint bits (uint n);
 
@@ -93,4 +95,9 @@ uint popcount (register int x);
 uint popcount16 (register int x);
 
 uint popcount8 (register int x);
+
+#ifdef __cplusplus
+}
+#endif
+
 #endif

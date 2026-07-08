@@ -45,49 +45,49 @@ uint bits (uint n) {
 
 
 uint GetField(uint *A, register  uint len, register uint index) {
-  register uint i=index*len/W, j=index*len-W*i, result;
-  if (j+len <= W)
-    result = (A[i] << (W-j-len)) >> (W-len);
+  register uint i=index*len/WORD, j=index*len-WORD*i, result;
+  if (j+len <= WORD)
+    result = (A[i] << (WORD-j-len)) >> (WORD-len);
   else {
     result = A[i] >> j;
-    result = result | (A[i+1] << (WW-j-len)) >> (W-len);
+    result = result | (A[i+1] << (WW-j-len)) >> (WORD-len);
   }
   return result;
 }
 
 
 void SetField(uint *A,register uint len, register uint index,register  uint x) {
-  uint i=index*len/W, j=index*len-i*W;
-  uint mask = ((j+len) < W ? ~0u << (j+len) : 0) | ((W-j) < W ? ~0u >> (W-j) : 0);
+  uint i=index*len/WORD, j=index*len-i*WORD;
+  uint mask = ((j+len) < WORD ? ~0u << (j+len) : 0) | ((WORD-j) < WORD ? ~0u >> (WORD-j) : 0);
   A[i] = (A[i] & mask) | x << j;
-  if (j+len>W) {
-    mask = ((~0u) << (len+j-W));
-    A[i+1] = (A[i+1] & mask)| x >> (W-j);
+  if (j+len>WORD) {
+    mask = ((~0u) << (len+j-WORD));
+    A[i+1] = (A[i+1] & mask)| x >> (WORD-j);
   }
 }
 
 
 uint GetVarField(uint *A, register  uint ini, register uint fin) {
-  register uint i=ini/W, j=ini-W*i, result;
+  register uint i=ini/WORD, j=ini-WORD*i, result;
   register uint len = (fin-ini+1);
-  if (j+len <= W)
-    result = (A[i] << (W-j-len)) >> (W-len);
+  if (j+len <= WORD)
+    result = (A[i] << (WORD-j-len)) >> (WORD-len);
   else {
     result = A[i] >> j;
-    result = result | (A[i+1] << (WW-j-len)) >> (W-len);
+    result = result | (A[i+1] << (WW-j-len)) >> (WORD-len);
   }
   return result;
 }
 
 
 void SetVarField(uint *A,register uint ini, register uint fin,register  uint x) {
-  uint i=ini/W, j=ini-i*W;
+  uint i=ini/WORD, j=ini-i*WORD;
   uint len = (fin-ini+1);
-  uint mask = ((j+len) < W ? ~0u << (j+len) : 0) | ((W-j) < W ? ~0u >> (W-j) : 0);
+  uint mask = ((j+len) < WORD ? ~0u << (j+len) : 0) | ((WORD-j) < WORD ? ~0u >> (WORD-j) : 0);
   A[i] = (A[i] & mask) | x << j;
-  if (j+len>W) {
-    mask = ((~0u) << (len+j-W));
-    A[i+1] = (A[i+1] & mask)| x >> (W-j);
+  if (j+len>WORD) {
+    mask = ((~0u) << (len+j-WORD));
+    A[i+1] = (A[i+1] & mask)| x >> (WORD-j);
   }
 }
 

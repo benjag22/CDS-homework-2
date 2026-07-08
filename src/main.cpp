@@ -2,6 +2,8 @@
 #include <iostream>
 #include <vector>
 
+#include "k2tree/kTree.h"
+#include "sdsl/pemb.hpp"
 namespace fs = std::filesystem;
 
 int main() {

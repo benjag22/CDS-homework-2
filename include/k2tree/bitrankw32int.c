@@ -23,7 +23,7 @@ bitRankW32Int * createBitRankW32Int( uint *bitarray, uint _n, char owner, uint _
   else br->factor=_factor;
   br->b=32;
   br->s=br->b*br->factor;
-  br->integers = br->n/W;
+  br->integers = br->n/WORD;
   buildRank(br);
   return br;
 }
@@ -72,16 +72,16 @@ uint rank(bitRankW32Int * br, uint i) {
   ++i;
   uint resp=br->Rs[i/br->s];
   uint aux=(i/br->s)*(br->factor);
-  for (a=aux;a<i/W;a++)
+  for (a=aux;a<i/WORD;a++)
     resp+=popcount(br->data[a]);
-  resp+=popcount(br->data[i/W]  & ((1<<(i & mask31))-1));
+  resp+=popcount(br->data[i/WORD]  & ((1<<(i & mask31))-1));
   return resp;
 }
 
 
 uint isBitSet(bitRankW32Int * br, uint i) 
 {
-  return (1u << (i % W)) & br->data[i/W];
+  return (1u << (i % WORD)) & br->data[i/WORD];
 }
 
 
@@ -92,7 +92,7 @@ int save(bitRankW32Int * br, FILE *f) {
   if (f == NULL) return 20;
   if (fwrite (&(n),sizeof(uint),1,f) != 1) return 21;
   if (fwrite (&(br->factor),sizeof(uint),1,f) != 1) return 21;
-  if (fwrite (br->data,sizeof(uint),n/W+1,f) != n/W+1) return 21;
+  if (fwrite (br->data,sizeof(uint),n/WORD+1,f) != n/WORD+1) return 21;
   if (fwrite (br->Rs,sizeof(uint),n/s+1,f) != n/s+1) return 21;
   return 0;
 }
@@ -112,10 +112,10 @@ int load(bitRankW32Int * br, FILE *f) {
   //  integers = (n+1)/W+1;
   //else
   //  integers = (n+1)/W;
-  br->integers = n/W;
-  br->data= (uint *) malloc(sizeof( uint) *(n/W+1));
+  br->integers = n/WORD;
+  br->data= (uint *) malloc(sizeof( uint) *(n/WORD+1));
   if (!br->data) return 1;
-  if (fread (br->data,sizeof(uint),br->n/W+1,f) != n/W+1) return 25;
+  if (fread (br->data,sizeof(uint),br->n/WORD+1,f) != n/WORD+1) return 25;
   br->owner = 1;
   br->Rs=(uint*)malloc(sizeof(uint)*(n/s+1));
   if (!br->Rs) return 1;
@@ -142,13 +142,13 @@ uint prev(bitRankW32Int * br,uint start) {
   // tuned to 32 bit machine
 
   uint i = start >> 5;
-  int offset = (start % W);
+  int offset = (start % WORD);
   uint answer = start;
   uint val = br->data[i] << (Wminusone-offset);
 
   if (!val) { val = br->data[--i]; answer -= 1+offset; }
 
-  while (!val) { val = br->data[--i]; answer -= W; }
+  while (!val) { val = br->data[--i]; answer -= WORD; }
 
   if (!(val & 0xFFFF0000)) { val <<= 16; answer -= 16; }
   if (!(val & 0xFF000000)) { val <<= 8; answer -= 8; }
@@ -246,26 +246,26 @@ uint select0(bitRankW32Int * br,uint x) {
   uint b= br->b;
   uint l=0, r=n/s;
   uint mid=(l+r)/2;
-  uint rankmid = mid*factor*W-(br->Rs)[mid];
+  uint rankmid = mid*factor*WORD-(br->Rs)[mid];
   while (l<=r) {
     if (rankmid<x)
       l = mid+1;
     else
       r = mid-1;
     mid = (l+r)/2;
-    rankmid = mid*factor*W-(br->Rs)[mid];
+    rankmid = mid*factor*WORD-(br->Rs)[mid];
   }
   //sequential search using popcount over a int
   uint left;
   left=mid*factor;
   x-=rankmid;
   uint j=br->data[left];
-  uint zeros = W-popcount(j);
+  uint zeros = WORD-popcount(j);
   while (zeros < x) {
     x-=zeros;left++;
     if (left > integers) return n;
     j = br->data[left];
-    zeros = W-popcount(j);
+    zeros = WORD-popcount(j);
   }
   //sequential search using popcount over a char
   left=left*b;

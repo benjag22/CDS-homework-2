@@ -8,7 +8,9 @@
 #include "basic.h"
 #define MAX_INFO 1024*1024+10
 
-
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 typedef struct matrixRep
 {
@@ -46,5 +48,8 @@ MREP * loadRepresentation(char * basename);
 void saveRepresentation(MREP * rep, char * basename);
 void destroyRepresentation(MREP * rep);
 
+#ifdef __cplusplus
+}
+#endif
 
 #endif

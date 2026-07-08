@@ -35,6 +35,10 @@
 //factor=4 => overhead 25%
 //factor=20=> overhead 5%
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct sbitRankW32Int{
     uint *data;
     char owner;
@@ -62,5 +66,8 @@ typedef struct sbitRankW32Int{
     int load(bitRankW32Int * br, FILE *f);
     bitRankW32Int * createBitRankW32IntFile(FILE *f, int *error);
 
+#ifdef __cplusplus
+}
+#endif
 
 #endif

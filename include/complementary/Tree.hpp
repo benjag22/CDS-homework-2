@@ -7,8 +7,6 @@
 #include "Vertex.hpp"
 #include "Edge.hpp"
 
-using namespace std;
-
 class Tree {
 private:
   Vertex *V;      // Array of nodes of the tree
@@ -92,7 +90,7 @@ public:
 
   int tree_cycle() {
     unsigned int n = this->nodes();
-    stack <unsigned int> s;
+    std::stack <unsigned int> s;
 
     char *visited = new char[n](); // TODO: Change data type to bool
     char *edges = new char[2*(n-1)]();
@@ -120,7 +118,7 @@ public:
 	if(!visited[this->E[i].getTgt()])
 	  s.push(i);      
 	else if(par != (int)this->E[i].getTgt() && par != -1) {
-	  cout << "\tThe tree has cycles!" << endl;
+	  std::cout << "\tThe tree has cycles!" << std::endl;
 	  return 1;
 	}
       }
@@ -133,7 +131,7 @@ public:
       }
     
     if(unvisited > 0) {
-      cout << "\tNo connected tree (" << unvisited << " unvisited nodes)" << endl;
+      std::cout << "\tNo connected tree (" << unvisited << " unvisited nodes)" << std::endl;
       return 1;
     }
 
@@ -143,7 +141,7 @@ public:
 	unvisited++;
       }
     if(unvisited > 0) {
-      cout << "\tNo connected graph (" << unvisited << " unvisited edges)" << endl;
+      std::cout << "\tNo connected graph (" << unvisited << " unvisited edges)" << std::endl;
       return 1;
     }
     
@@ -154,7 +152,7 @@ public:
   void get_DFS(int *parent, int *dfs_order) {
     unsigned int n = this->nodes();
     int cnt=0;
-    stack <unsigned int> s;
+    std::stack <unsigned int> s;
     s.push(0); // Root      
 
     while(!s.empty()) {

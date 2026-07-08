@@ -7,9 +7,6 @@
 
 #include <sdsl/int_vector.hpp>
 
-using namespace std;
-using namespace sdsl;
-
 #define CLOSE_PAR 0
 #define OPEN_PAR 1
 #define EMPTY 2
@@ -149,7 +146,7 @@ public:
     unsigned int *edges = new unsigned int[2*m]();
     unsigned int num_tree_edges = 2*(n-1);
 
-    stack <unsigned int> s;
+    std::stack <unsigned int> s;
     visited[init] = 1;
     s.push(init);
     parent[init] = -1;
@@ -239,7 +236,7 @@ public:
 
   void connected_graph() {
     unsigned int n = this->vertices();
-    stack <unsigned int> s;
+    std::stack <unsigned int> s;
     char *visited = new char[n]();
     int curr = -1;
     unsigned int edge;
@@ -268,15 +265,15 @@ public:
 	num_vertices++;
       }
     
-    cout << "unvisited vertices: " << num_vertices << ", visited vertices: " <<
-      n-num_vertices << endl;
+    std::cout << "unvisited vertices: " << num_vertices << ", visited vertices: " <<
+      n-num_vertices << std::endl;
   }
 
-  int_vector<> ps_tree_encoding() {
+  sdsl::int_vector<> ps_tree_encoding() {
     unsigned int n = this->vertices();
     unsigned int m = this->edges();
 
-    int_vector<> S(4*n-5, NONE, 8); // Output string
+    sdsl::int_vector<> S(4*n-5, NONE, 8); // Output string
     char *visited = new char[2*m]();
     /*** Initial setting ***/
     

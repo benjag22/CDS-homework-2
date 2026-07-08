@@ -634,7 +634,7 @@ namespace sdsl
 
 
 			// Return index of interior face where edge e belongs
-			void get_face(size_type e, array<int, 3> &face)
+			void get_face(size_type e, std::array<int, 3> &face)
 			{
 				char flag = 1;
 				size_type nxt = e;

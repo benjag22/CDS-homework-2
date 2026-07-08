@@ -133,8 +133,8 @@ MREP * compactCreateKTree(uint * xedges, uint *yedges, uint numberOfNodes,ulong 
 
 	
 //	printf("numberOfNodes: %d , edges: %d, maxl: %d\n",numberOfNodes, nedges,maxl);
-	uint * bits_BTL=(uint *) malloc(sizeof(uint)*((nedges*maxl*K*K+W-1)/W));
-	for(i=0;i<((nedges*maxl*K*K+W-1)/W);i++)
+	uint * bits_BTL=(uint *) malloc(sizeof(uint)*((nedges*maxl*K*K+WORD-1)/WORD));
+	for(i=0;i<((nedges*maxl*K*K+WORD-1)/WORD);i++)
 		bits_BTL[i]=0;
 	bits = bits_BTL;
 
@@ -295,7 +295,7 @@ void saveRepresentation(MREP * rep, char * basename){
 
   fwrite (&(n),sizeof(uint),1,ft);
   fwrite (&(rep->btl->factor),sizeof(uint),1,ft);
-  fwrite (rep->btl->data,sizeof(uint),n2/W+1,ft);
+  fwrite (rep->btl->data,sizeof(uint),n2/WORD+1,ft);
   fwrite (rep->btl->Rs,sizeof(uint),n/s+1,ft);
   fclose(ft);
 	free(filename);
@@ -325,11 +325,11 @@ MREP * loadRepresentation(char * basename){
   uint s=rep->btl->s;
   uint n= rep->btl->n;
   uint n2 = rep->btl_len;
-  rep->btl->integers = n/W;
-  rep->btl->data= (uint *) malloc(sizeof( uint) *(n2/W+1));
+  rep->btl->integers = n/WORD;
+  rep->btl->data= (uint *) malloc(sizeof( uint) *(n2/WORD+1));
 	rep->bt_len = n;
   
-  fread (rep->btl->data,sizeof(uint),n2/W+1,ft);
+  fread (rep->btl->data,sizeof(uint),n2/WORD+1,ft);
   rep->btl->owner = 1;
   rep->btl->Rs=(uint*)malloc(sizeof(uint)*(n/s+1));
   fread (rep->btl->Rs,sizeof(uint),n/s+1,ft) ;
