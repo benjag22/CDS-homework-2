@@ -14,7 +14,13 @@ add_executable(
     src/GraphImp.cpp
     include/k2tree/basic.c
     include/k2tree/bitrankw32int.c
+    include/k2tree/buildtree.c
+    include/k2tree/compressleaves.c
+    include/k2tree/directcodes.c
+    include/k2tree/hash.c
     include/k2tree/kTree.c
+    include/k2tree/MemoryManager.c
+    src/build_trees.hpp
 )
 
 target_include_directories(cds-hw2 PRIVATE include)
