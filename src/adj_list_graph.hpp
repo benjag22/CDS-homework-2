@@ -32,13 +32,21 @@ public:
             infile >> src >> dst;
             m_adj[src].push_back(dst);
         }
+
+        for (auto &list: m_adj) {
+            std::ranges::sort(list);
+        }
     }
 
     [[nodiscard]] int32_t degree(const int32_t u) override {
         return m_adj[u].size();
     }
 
-    [[nodiscard]] bool neighbors(const int32_t u, const int32_t v) override {
+    [[nodiscard]] bool neighbors(int32_t u, int32_t v) override {
+        if (m_adj[u].size() > m_adj[v].size()) {
+            std::swap(u, v);
+        }
+
         return std::ranges::binary_search(m_adj[u], v);
     }
 };
