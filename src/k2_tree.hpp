@@ -21,6 +21,8 @@ public:
         out_file_path.replace_extension(K2_EXT);
 
         if (fs::exists(out_file_path)) {
+            std::cout << "k2 tree file for " << file_path.stem() << " not, reloading" << std::endl;
+            m_trep = loadTreeRepresentation(const_cast<char *>(out_file_path.c_str()));
             return;
         }
 
@@ -91,7 +93,7 @@ public:
             // max level K1, 5 = smaller, 6 = biggest
             "6",
             // speeddup, 22 if large graph
-            "21",
+            "22",
         };
 
         if (build_tree(7, argv_bt) != 0) {
@@ -111,6 +113,7 @@ public:
             std::cerr << "compress_leaves() failed" << std::endl;
         }
 
+        std::cout << "reloading k2 tree" << std::endl;
         m_trep = loadTreeRepresentation(const_cast<char *>(out_file_path_cstr));
     }
 

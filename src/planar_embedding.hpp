@@ -19,6 +19,10 @@ public:
         out_file_path.replace_extension(PEMB_EXT);
 
         if (fs::exists(out_file_path)) {
+            std::cout << "planar embedding for " << file_path.stem() << " found, reloading" << std::endl;
+            std::ifstream infile(out_file_path, std::ios::binary);
+            m_pemb.load(infile);
+            infile.close();
             return;
         }
 
@@ -34,6 +38,7 @@ public:
         pemb.serialize(outfile);
         outfile.close();
 
+        std::cout << "reloading planar embedding" << std::endl;
         std::ifstream infile(out_file_path, std::ios::binary);
         m_pemb.load(infile);
         infile.close();
