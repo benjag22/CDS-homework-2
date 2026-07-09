@@ -6,8 +6,9 @@
 #include "complementary/utils.hpp"
 #include "sdsl/pemb.hpp"
 
-class PlanarEmbedding {
+class PlanarEmbedding : Testable {
     sdsl::pemb<> m_pemb;
+    uint64_t m_size_in_bytes = 0;
 
     using size_type = sdsl::pemb<>::size_type;
 
@@ -21,6 +22,11 @@ public:
         if (fs::exists(out_file_path)) {
             std::cout << "planar embedding for " << file_path.stem() << " found, reloading" << std::endl;
             std::ifstream infile(out_file_path, std::ios::binary);
+
+            infile.seekg(0, std::ios::end);
+            m_size_in_bytes = infile.tellg();
+            infile.seekg(0, std::ios::beg);
+
             m_pemb.load(infile);
             infile.close();
             return;
@@ -44,11 +50,11 @@ public:
         infile.close();
     }
 
-    [[nodiscard]] bool degree(const size_type u) {
-        return m_pemb.degree(u);
+    [[nodiscard]] int32_t degree(const int32_t u) override {
+        return static_cast<int32_t>(m_pemb.degree(u));
     }
 
-    [[nodiscard]] bool neighbours(const size_type u, const size_type v) {
+    [[nodiscard]] bool neighbors(const int32_t u, const int32_t v) override {
         if (u >= m_pemb.vertices() || v >= m_pemb.vertices()) {
             return false;
         }
@@ -63,5 +69,9 @@ public:
         }
 
         return false;
+    }
+
+    [[nodiscard]] uint64_t size_in_bytes() const override {
+        return m_size_in_bytes;
     }
 };

@@ -10,7 +10,8 @@
 #include "testable.hpp"
 
 class AdjListGraph : Testable {
-    std::vector<std::vector<int32_t>> m_adj;
+    std::vector<std::vector<int32_t> > m_adj;
+    uint64_t m_size_in_bytes = 0;
 
 public:
     explicit AdjListGraph(const std::filesystem::path &file_path) {
@@ -36,10 +37,17 @@ public:
         for (auto &list: m_adj) {
             std::ranges::sort(list);
         }
+
+        m_size_in_bytes = sizeof(std::vector<std::vector<int32_t> >)
+            + sizeof(std::vector<int32_t>) * m_adj.size();
+
+        for (const auto &list: m_adj) {
+            m_size_in_bytes += sizeof(int32_t) * list.size();
+        }
     }
 
     [[nodiscard]] int32_t degree(const int32_t u) override {
-        return m_adj[u].size();
+        return static_cast<int32_t>(m_adj[u].size());
     }
 
     [[nodiscard]] bool neighbors(int32_t u, int32_t v) override {
@@ -48,5 +56,9 @@ public:
         }
 
         return std::ranges::binary_search(m_adj[u], v);
+    }
+
+    [[nodiscard]] uint64_t size_in_bytes() const override {
+        return m_size_in_bytes;
     }
 };

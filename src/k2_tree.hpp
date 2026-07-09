@@ -12,6 +12,7 @@
 
 class K2Tree : Testable {
     TREP *m_trep;
+    uint64_t m_size_in_bytes = 0;
 
 public:
     explicit K2Tree(const std::filesystem::path &file_path) {
@@ -21,8 +22,9 @@ public:
         out_file_path.replace_extension(K2_EXT);
 
         if (fs::exists(out_file_path)) {
-            std::cout << "k2 tree file for " << file_path.stem() << " not, reloading" << std::endl;
+            std::cout << "k2 tree file for " << file_path.stem() << " found, reloading" << std::endl;
             m_trep = loadTreeRepresentation(const_cast<char *>(out_file_path.c_str()));
+            calculate_size_in_bytes(file_path);
             return;
         }
 
@@ -115,6 +117,8 @@ public:
 
         std::cout << "reloading k2 tree" << std::endl;
         m_trep = loadTreeRepresentation(const_cast<char *>(out_file_path_cstr));
+
+        calculate_size_in_bytes(file_path);
     }
 
     ~K2Tree() override {
@@ -122,10 +126,37 @@ public:
     }
 
     [[nodiscard]] int32_t degree(const int32_t u) override {
-        return compactTreeAdjacencyList(m_trep, u)[0];
+        return static_cast<int32_t>(compactTreeAdjacencyList(m_trep, u)[0]);
     }
 
     [[nodiscard]] bool neighbors(const int32_t u, const int32_t v) override {
         return compactTreeCheckLink(m_trep, u, v);
+    }
+
+    [[nodiscard]] uint64_t size_in_bytes() const override {
+        return m_size_in_bytes;
+    }
+
+private:
+    void calculate_size_in_bytes(std::filesystem::path out_file_path) {
+        namespace fs = std::filesystem;
+
+        m_size_in_bytes = 0;
+
+        out_file_path.replace_extension(std::string(K2_EXT) + ".a");
+
+        for (const auto &ext: K2_EXTS_FOR_SIZE) {
+            out_file_path.replace_extension(ext);
+
+            std::ifstream infile(out_file_path, std::ios::binary);
+            if (!infile) {
+                std::cerr << "failed to open " << out_file_path << std::endl;
+                exit(1);
+            }
+
+            infile.seekg(0, std::ios::end);
+            m_size_in_bytes += infile.tellg();
+            infile.close();
+        }
     }
 };
