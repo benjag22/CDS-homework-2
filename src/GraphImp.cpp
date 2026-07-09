@@ -1,4 +1,4 @@
-#include "AdjacencyList.cpp"
+#include "adj_list_graph.hpp"
 #include "sdsl/pemb.hpp"
 
 enum class Representation {
@@ -12,5 +12,5 @@ public:
 
 private:
     sdsl::pemb<> graph;
-    AdjacencyList adjList;
+    AdjListGraph adjList;
 };

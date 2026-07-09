@@ -4,16 +4,11 @@
 #include <iostream>
 #include <vector>
 
-#include "build_trees.hpp"
+#include "adj_list_graph.hpp"
+#include "k2_tree.hpp"
+#include "planar_embedding.hpp"
 
 namespace fs = std::filesystem;
-
-uint32_t exp_pow(const uint32_t base, const uint32_t pow) {
-    uint32_t result = 1;
-    for (uint32_t i = 0; i < pow; i++)
-        result *= base;
-    return result;
-}
 
 int main() {
     const fs::path graphs_dir_path = fs::path(__builtin_FILE()).parent_path().parent_path() / "graphs";
@@ -32,8 +27,9 @@ int main() {
     }
 
     for (const auto &file_path: graph_file_paths) {
-        build_k2tree(file_path);
-        build_pemb(file_path);
+        AdjListGraph adj_list_graph(file_path);
+        K2Tree k2_tree(file_path);
+        PlanarEmbedding pemb(file_path);
     }
 
     return 0;
