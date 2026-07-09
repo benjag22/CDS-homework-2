@@ -216,7 +216,7 @@ int strcomp(const unsigned char *s1, const unsigned char *s2, register unsigned 
 		exit(1);
 	}
 
-    getMemoryBlock(_memMgr,( byte **)&(hash[*addr].word),len+1);
+    getMemoryBlock(_memMgr,( byte_t **)&(hash[*addr].word),len+1);
    
 	//mystrncpy((char *) hash[*addr].word, (char *)aWord, len);
 

@@ -46,7 +46,7 @@ extern "C" {
 #include <malloc.h>
 
 #ifndef DEFBYTE	
-	#define byte unsigned char
+	#define byte_t unsigned char
 	#define DEFBYTE
 #endif
 
@@ -58,10 +58,10 @@ extern "C" {
 	 * Definition of structure MemoryManager
 	 */
 	struct sMem {
-		byte *BLOCKS[MAX_BLOCKS]; 		//array of blocks of size LARGE_BLOCK_SIZE
+		byte_t *BLOCKS[MAX_BLOCKS]; 		//array of blocks of size LARGE_BLOCK_SIZE
 		unsigned int  currentBlock;	//currentBlock in the array of blocks
 		unsigned long remainderBytes; //number of bytes not yet assigned in BLOCKS[currentBlock]
-		byte *availableByte;				//pointer to next byte not yet assigned 
+		byte_t *availableByte;				//pointer to next byte not yet assigned
 	} ;
 	
 	typedef struct sMem *MemoryManager;
@@ -69,7 +69,7 @@ extern "C" {
 		 
 	MemoryManager createMemoryManager(void);
 	void destroyMemoryManager (MemoryManager mm);
-	void getMemoryBlock (MemoryManager mm, byte **dst, const unsigned int size);
+	void getMemoryBlock (MemoryManager mm, byte_t **dst, const unsigned int size);
 	void createNewMemoryBlock (MemoryManager mm);
 
 #ifdef __cplusplus

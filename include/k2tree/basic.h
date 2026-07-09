@@ -59,8 +59,8 @@ extern "C" {
 #endif
 #define size_uchar 256
 
-#ifndef byte
-      #define byte unsigned char
+#ifndef byte_t
+      #define byte_t unsigned char
 #endif
 
 /* reads bit p from e */

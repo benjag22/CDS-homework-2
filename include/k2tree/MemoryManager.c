@@ -61,7 +61,7 @@ void destroyMemoryManager (MemoryManager mm){
  ------------------------------------------------------------------ */
 
 void createNewMemoryBlock (MemoryManager mm) {
-	mm->BLOCKS[mm->currentBlock] = (byte *) malloc (LARGE_BLOCK_SIZE);
+	mm->BLOCKS[mm->currentBlock] = (byte_t *) malloc (LARGE_BLOCK_SIZE);
 
 	if (mm->BLOCKS[mm->currentBlock] == NULL) {
 		//fprintf(stderr, "\nERROR...\nUnable to allocate enough memory. File too long\n");
@@ -77,7 +77,7 @@ void createNewMemoryBlock (MemoryManager mm) {
  getBlock method
  returns a pointer to a free block of memory of size "size"
  ------------------------------------------------------------------ */
-void getMemoryBlock (MemoryManager mm, byte **dst, const unsigned int size) {
+void getMemoryBlock (MemoryManager mm, byte_t **dst, const unsigned int size) {
 	if (mm->remainderBytes < size)	{
 		mm->currentBlock++;
 		createNewMemoryBlock(mm);

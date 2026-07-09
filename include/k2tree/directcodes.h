@@ -17,7 +17,7 @@ extern "C" {
 
 typedef struct sFTRep {
 	  uint listLength;
-	  byte nLevels;
+	  byte_t nLevels;
 	  uint tamCode;
 	  uint * levels;
 	  uint * levelsIndex;
