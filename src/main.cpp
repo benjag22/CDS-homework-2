@@ -4,9 +4,7 @@
 #include <iostream>
 #include <vector>
 
-#include "adj_list_graph.hpp"
-#include "k2_tree.hpp"
-#include "planar_embedding.hpp"
+#include "tester.hpp"
 
 namespace fs = std::filesystem;
 
@@ -26,11 +24,7 @@ int main() {
         exit(1);
     }
 
-    for (const auto &file_path: graph_file_paths) {
-        AdjListGraph adj_list_graph(file_path);
-        K2Tree k2_tree(file_path);
-        PlanarEmbedding pemb(file_path);
-    }
+    run_tests(graph_file_paths);
 
     return 0;
 }

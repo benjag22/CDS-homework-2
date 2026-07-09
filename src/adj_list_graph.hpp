@@ -9,8 +9,9 @@
 
 #include "testable.hpp"
 
-class AdjListGraph : Testable {
+class AdjListGraph : public Testable {
     std::vector<std::vector<int32_t> > m_adj;
+    int32_t m_vertices = 0;
     uint64_t m_size_in_bytes = 0;
 
 public:
@@ -21,8 +22,8 @@ public:
             exit(1);
         }
 
-        int32_t num_vertices, num_edges;
-        infile >> num_vertices >> num_edges;
+        int32_t num_edges;
+        infile >> m_vertices >> num_edges;
 
         const int32_t total_edges = num_edges * 2;
 
@@ -44,6 +45,10 @@ public:
         for (const auto &list: m_adj) {
             m_size_in_bytes += sizeof(int32_t) * list.size();
         }
+    }
+
+    [[nodiscard]] int32_t vertices() const override {
+        return m_vertices;
     }
 
     [[nodiscard]] int32_t degree(const int32_t u) override {

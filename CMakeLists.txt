@@ -9,9 +9,6 @@ endif ()
 
 add_executable(
     cds-hw2
-    src/main.cpp
-    src/adj_list_graph.hpp
-    src/GraphImp.cpp
     include/k2tree/basic.c
     include/k2tree/bitrankw32int.c
     include/k2tree/buildtree.c
@@ -20,10 +17,14 @@ add_executable(
     include/k2tree/hash.c
     include/k2tree/kTree.c
     include/k2tree/MemoryManager.c
+    src/main.cpp
+    src/adj_list_graph.hpp
     src/k2_tree.hpp
     src/common.hpp
     src/planar_embedding.hpp
     src/testable.hpp
+    src/tester.hpp
+    src/int_generator.hpp
 )
 
 target_include_directories(cds-hw2 PRIVATE include)

@@ -6,8 +6,9 @@
 #include "complementary/utils.hpp"
 #include "sdsl/pemb.hpp"
 
-class PlanarEmbedding : Testable {
+class PlanarEmbedding : public Testable {
     sdsl::pemb<> m_pemb;
+    int32_t m_vertices = 0;
     uint64_t m_size_in_bytes = 0;
 
     using size_type = sdsl::pemb<>::size_type;
@@ -29,6 +30,9 @@ public:
 
             m_pemb.load(infile);
             infile.close();
+
+            m_vertices = static_cast<int32_t>(m_pemb.vertices());
+
             return;
         }
 
@@ -48,6 +52,10 @@ public:
         std::ifstream infile(out_file_path, std::ios::binary);
         m_pemb.load(infile);
         infile.close();
+    }
+
+    [[nodiscard]] int32_t vertices() const override {
+        return m_vertices;
     }
 
     [[nodiscard]] int32_t degree(const int32_t u) override {

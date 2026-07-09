@@ -10,8 +10,9 @@
 #include "k2tree/compressleaves.h"
 #include "k2tree/kTree.h"
 
-class K2Tree : Testable {
+class K2Tree : public Testable {
     TREP *m_trep;
+    int32_t m_vertices = 0;
     uint64_t m_size_in_bytes = 0;
 
 public:
@@ -44,13 +45,12 @@ public:
 
         std::cout << "mapping edges for k2 tree" << std::endl;
 
-        int32_t num_vertices;
         int32_t num_edges;
-        infile >> num_vertices >> num_edges;
+        infile >> m_vertices >> num_edges;
 
         const int32_t total_edges = num_edges * 2;
 
-        outfile.write(reinterpret_cast<const char *>(&num_vertices), sizeof(int32_t));
+        outfile.write(reinterpret_cast<const char *>(&m_vertices), sizeof(int32_t));
         outfile.write(reinterpret_cast<const char *>(&total_edges), sizeof(int64_t));
 
         int32_t src;
@@ -70,7 +70,7 @@ public:
             outfile.write(reinterpret_cast<const char *>(&val), sizeof(int32_t));
         }
 
-        while (current_node < num_vertices - 1) {
+        while (current_node < m_vertices - 1) {
             current_node++;
             const int32_t marker = -(current_node + 1);
             outfile.write(reinterpret_cast<const char *>(&marker), sizeof(int32_t));
@@ -123,6 +123,10 @@ public:
 
     ~K2Tree() override {
         destroyTreeRepresentation(m_trep);
+    }
+
+    [[nodiscard]] int32_t vertices() const override {
+        return m_vertices;
     }
 
     [[nodiscard]] int32_t degree(const int32_t u) override {
