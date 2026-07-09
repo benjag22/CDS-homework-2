@@ -75,7 +75,7 @@ void run_tests(std::ofstream &outfile, const char *graph_name, T &ds, const char
     int_generator<int32_t> int_gen(0, ds.vertices());
 
     for (int32_t i = 0; i < RUNS; i++) {
-        display_progress(i, RUNS);
+        display_progress(i + 1, RUNS);
 
         const int32_t u = int_gen();
         const int32_t v = int_gen();
@@ -100,6 +100,7 @@ void run_tests(std::ofstream &outfile, const char *graph_name, T &ds, const char
         neighbours_measurement.times[i] = elapsed_time.count();
         neighbours_measurement.times[i] /= REPS;
     }
+    std::cout << std::endl;
 
     degree_measurement.calculate();
     neighbours_measurement.calculate();

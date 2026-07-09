@@ -4,3 +4,4 @@ build
 graphs
 data
 plots
+.venv
